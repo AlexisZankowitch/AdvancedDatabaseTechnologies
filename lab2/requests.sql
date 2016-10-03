@@ -1,0 +1,31 @@
+/*Retrieve list of students in the form of one field that contains both name
+and surname in the form “SURNAME, Name”*/
+SELECT ST_SURNAME || ', ' || ST_NAME AS SURNAME_NAME FROM STUDENTS;
+
+/*Find all curses whose names contain word “Data”*/
+SELECT C_TITLE FROM COURSES
+WHERE UPPER(C_TITLE) LIKE '%DATA%';
+
+/*Retrieve all students that have average mark above 8*/
+SELECT GRADES.G_STUDENT,STUDENTS.ST_NAME,STUDENTS.ST_SURNAME FROM STUDENTS
+INNER JOIN GRADES ON STUDENTS.ST_ID = GRADES.G_STUDENT
+HAVING avg(GRADES.G_GRADE) > 8
+GROUP BY GRADES.G_STUDENT, ST_NAME, ST_SURNAME;
+
+/*Retrieve all students that have at least one grade below 4*/
+SELECT STUDENTS.ST_ID,STUDENTS.ST_NAME,STUDENTS.ST_SURNAME FROM STUDENTS
+INNER JOIN GRADES ON STUDENTS.ST_ID = GRADES.G_STUDENT
+WHERE GRADES.G_GRADE < 4
+GROUP BY STUDENTS.ST_NAME, STUDENTS.ST_SURNAME, STUDENTS.ST_ID ;
+
+/*Add a constraint specifying that the grade must be between 1 and 10*/
+ALTER TABLE GRADES
+ADD CONSTRAINT GRADES_CHK_INTERVAL CHECK
+(G_GRADE >= 1 AND G_GRADE <=10)
+ENABLE;
+  /*check constraint*/
+  INSERT INTO GRADES (G_ID, G_COURSE, G_STUDENT, G_GRADE, G_DATE)
+  VALUES (SEQ_GRA.nextval, 1, 1, -8, TO_DATE('28.06.10', 'DD.MM.YY' ));
+
+/*Drop one table*/
+DROP TABLE STUDENTS;
