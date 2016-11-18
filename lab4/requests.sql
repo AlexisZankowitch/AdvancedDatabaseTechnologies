@@ -58,7 +58,6 @@ WHERE STUD_GRADES.AVERAGE_GRADE >=
       ) + 1;
 
 /*Find which grades differ the most from the corresponding teacher’s average grade.*/
-
 SELECT DISTINCT G_COURSE,FIRST_VALUE(G_GRADE)
   OVER (PARTITION BY G_COURSE ORDER BY DIFF DESC)
 FROM (
@@ -83,3 +82,39 @@ FROM (
   ORDER BY COURSES.C_ID
 )
 ORDER BY G_COURSE ASC;
+
+/*How many days after the first exam of each student was
+passed were the other exams passed by him?*/
+SELECT GRADES.G_DATE, GRADES.G_STUDENT, GRADES.G_DATE-min_date as days FROM GRADES
+INNER JOIN (
+SELECT min_date, st_id FROM (
+SELECT
+  GRADES.G_STUDENT as st_id, GRADES.G_DATE as min_date,
+  rank() OVER (PARTITION BY GRADES.G_STUDENT ORDER BY GRADES.G_DATE ASC) as rnk
+FROM GRADES)
+WHERE rnk=1)
+ON GRADES.G_STUDENT = st_id;
+
+/*Find which grades differ more than 1 mark from
+the highest grade of the corresponding student.*/
+SELECT GRADES.G_STUDENT,GRADES.G_GRADE, max FROM GRADES
+INNER JOIN (
+  SELECT
+    MAX(GRADES.G_GRADE) as max, GRADES.G_STUDENT as st_id
+  FROM GRADES
+  GROUP BY GRADES.G_STUDENT
+) ON st_id = GRADES.G_STUDENT
+WHERE GRADES.G_GRADE < max - 1
+ORDER BY GRADES.G_STUDENT ASC;
+
+  /*check*/
+  SELECT GRADES.G_STUDENT,GRADES.G_GRADE FROM GRADES
+  ORDER BY GRADES.G_STUDENT ASC;
+
+/*Divide students into four groups by their average mark.
+The first 25% of students have to be assigned to the first group,
+the second ones to the second and so on. */
+SELECT ST_ID, AVERAGE_GRADE,
+  PERCENT_RANK()
+    OVER (ORDER BY AVERAGE_GRADE ASC) as pr
+FROM STUD_GRADES;
