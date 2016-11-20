@@ -59,7 +59,7 @@ WHERE STUD_GRADES.AVERAGE_GRADE >=
 
 /*Find which grades differ the most from the corresponding teacher’s average grade.*/
 SELECT DISTINCT G_COURSE,FIRST_VALUE(G_GRADE)
-  OVER (PARTITION BY G_COURSE ORDER BY DIFF DESC)
+  OVER (PARTITION BY G_COURSE ORDER BY DIFF DESC) AS GRADE
 FROM (
   SELECT
     T_AVG,
@@ -85,7 +85,9 @@ ORDER BY G_COURSE ASC;
 
 /*How many days after the first exam of each student was
 passed were the other exams passed by him?*/
-SELECT GRADES.G_DATE, GRADES.G_STUDENT, GRADES.G_DATE-min_date as days FROM GRADES
+SELECT GRADES.G_DATE as DATE_FIRST_EXAM,
+  GRADES.G_STUDENT,
+  GRADES.G_DATE-min_date as days FROM GRADES
 INNER JOIN (
 SELECT min_date, st_id FROM (
 SELECT
@@ -109,6 +111,7 @@ ORDER BY GRADES.G_STUDENT ASC;
 
   /*check*/
   SELECT GRADES.G_STUDENT,GRADES.G_GRADE FROM GRADES
+    WHERE G_STUDENT = 1
   ORDER BY GRADES.G_STUDENT ASC;
 
 /*Divide students into four groups by their average mark.
