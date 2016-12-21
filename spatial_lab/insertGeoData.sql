@@ -18,6 +18,15 @@
         mdsys.sdo_ordinate_array(0,0, 30,40)),
     'HANA-HOUSE'
   );
+  /*POLYGON COMPOUND*/
+  INSERT INTO BUILDINGS VALUES (
+    SEQ_BUI.nextval,
+    mdsys.sdo_geometry(
+        2003, null, null,
+        mdsys.sdo_elem_info_array(1,1005,1, 1,2,1),
+        mdsys.sdo_ordinate_array(110,50,110,80,125,80,125,90,135,90,135,80,150,80,150,50,110,50)),
+    'BIGE-HOUSE'
+  );
   END;
 
 /*ROADS*/
@@ -37,7 +46,7 @@
     mdsys.sdo_geometry(
         2003, null, null,
         mdsys.sdo_elem_info_array(1,3,3),
-        mdsys.sdo_ordinate_array(0,40, 160,50)),
+        mdsys.sdo_ordinate_array(0,40, 100,50)),
     'SECOND-STREET'
   );
   /*ONE RECTANGLE*/
@@ -47,7 +56,16 @@
         2003, null, null,
         mdsys.sdo_elem_info_array(1,3,3),
         mdsys.sdo_ordinate_array(40,90,100,100)),
-    'THIRD-STREET'
+    'THIRD-ROAD'
+  );
+  /*ONE RECTANGLE*/
+  INSERT INTO ROADS VALUES (
+    SEQ_ROA.nextval,
+    mdsys.sdo_geometry(
+        2003, null, null,
+        mdsys.sdo_elem_info_array(1,3,3),
+        mdsys.sdo_ordinate_array(150,0,160,100)),
+    'FOURTH-ROAD'
   );
   /*COMPOUND POLYGON*/
   INSERT INTO ROADS VALUES (
@@ -55,19 +73,18 @@
     mdsys.sdo_geometry(
         2003, null, null,
         mdsys.sdo_elem_info_array(1,1005,2, 1,2,2, 5,2,1, 7,2,2, 11,2,1),
-        mdsys.sdo_ordinate_array(160,80,130,120,100,100,110,100,135,110,150,80,160,80)),
-    'VANILLA-STREET'
+        mdsys.sdo_ordinate_array(90,100,100,160,160,100,150,100,100,150,100,100,90,100)),
+    'CIRCLE-ROAD'
   );
   END;
-
-/*POUNDS*/
+/*PONDS*/
   /*ONE CIRCLE*/
   INSERT INTO PONDS VALUES (
     SEQ_PON.nextval,
     mdsys.sdo_geometry(
         2003, null, null,
         mdsys.sdo_elem_info_array(1,1003,4),
-        mdsys.sdo_ordinate_array(115,50,140,70,115,90)),
+        mdsys.sdo_ordinate_array(125,100,150,125,125,150)),
     'ROUND-POUND'
   );
 
